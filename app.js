@@ -534,7 +534,7 @@ function processRequest(req, res, next) {
         console.log('Unsecured Call');
 
         // Add API Key to params, if any.
-        if (apiKey != '' && apiKey != 'undefined' && apiKey != undefined) {
+        if (apiKey != '' && apiKey != 'undefined' && apiKey != undefined && apiConfig.keyLocation == 'query' ) {
             if (options.path.indexOf('?') !== -1) {
                 options.path += '&';
             }
@@ -594,6 +594,11 @@ function processRequest(req, res, next) {
         if (!options.headers['Content-Type'] && content) {
             options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
+
+	if (apiKey != '' && apiKey != 'undefined' && apiKey != undefined && apiConfig.keyLocation == 'header' ) {
+	    options.headers[apiConfig.keyParam] = apiKey;
+	    console.log('Added Header ' + apiConfig.keyParam + ': ' + apiKey);
+	}
 
         if (config.debug) {
             console.log(util.inspect(options));
